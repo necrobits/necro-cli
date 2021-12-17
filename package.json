@@ -54,7 +54,6 @@
     "bin": "necro",
     "commands": "./dist/commands",
     "plugins": [
-      "@oclif/plugin-plugins"
     ],
     "topicSeparator": " ",
     "topics": {
