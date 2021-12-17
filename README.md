@@ -18,6 +18,10 @@ Or using Yarn
 ```sh-session
 $ yarn global add necro-cli
 ```
+You can also run directly using npx, for example
+```sh-session
+$ npx necro-cli bootstrap
+```
 <!-- usagestop -->
 # Commands
 <!-- commands -->
