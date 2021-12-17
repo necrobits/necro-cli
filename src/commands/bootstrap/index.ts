@@ -26,26 +26,9 @@ type BootstrapList = {
   [typeName: string]: BootstrapProject
 }
 
-const builtinBootstrapList = {
-  "react": {
-    "description": "A Frontend project using React",
-    "repo": "https://github.com/necrobits/react-boilerplate",
-    "variants": {
-      "axios-router-v6": {
-        "description": "with Axios and Router v6",
-        "branch": "axios-router-v6"
-      },
-      "axios-router-v5": {
-        "description": "with Axios and Router v5",
-        "branch": "axios-router-v5"
-      }
-    }
-  }
-};
-
 export default class BootstrapCommand extends Command {
   userArgs: BootstrapArgs = {};
-  bootstrapList: BootstrapList = builtinBootstrapList;
+  bootstrapList: BootstrapList = {};
   static description = 'Use a boilerplate and setup a new project'
 
   static examples = [
