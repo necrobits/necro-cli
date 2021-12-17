@@ -16,7 +16,7 @@ $ npm install -g necro-cli
 ```
 Or using Yarn
 ```sh-session
-$ yarn add -g necro-cli
+$ yarn global add necro-cli
 ```
 <!-- usagestop -->
 # Commands
