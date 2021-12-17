@@ -106,7 +106,7 @@ export default class BootstrapCommand extends Command {
     const projectType = this.userArgs.project_type!;
     const variant = this.userArgs.variant!;
 
-    const typeOk = _.has(this.bootstrapList, this.userArgs.project_type!);
+    const typeOk = _.has(this.bootstrapList, this.userArgs.project_type!)
     if (!typeOk) {
       console.log(`Project type '${projectType}' is not supported`);
       return false;
