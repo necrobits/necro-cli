@@ -5,22 +5,22 @@ The command line tool for faster developing experience
 
 # Table of Contents
 <!-- toc -->
-* [Usage](#usage)
+* [Table of Contents](#table-of-contents)
+* [Installation](#installation)
 * [Commands](#commands)
 <!-- tocstop -->
 # Installation
 <!-- usage -->
-Using NPM
 ```sh-session
 $ npm install -g necro-cli
-```
-Or using Yarn
-```sh-session
-$ yarn global add necro-cli
-```
-You can also run directly using npx, for example
-```sh-session
-$ npx necro-cli bootstrap
+$ necro COMMAND
+running command...
+$ necro (--version)
+necro-cli/0.0.2 darwin-x64 node-v12.22.6
+$ necro --help [COMMAND]
+USAGE
+  $ necro COMMAND
+...
 ```
 <!-- usagestop -->
 # Commands
@@ -47,5 +47,5 @@ DESCRIPTION
   Use a boilerplate and setup a new project
 ```
 
-_See code: [dist/commands/bootstrap/index.ts](https://github.com/necrobits/necro-cli/blob/v0.0.0/dist/commands/bootstrap/index.ts)_
+_See code: [dist/commands/bootstrap/index.ts](https://github.com/necrobits/necro-cli/blob/v0.0.2/dist/commands/bootstrap/index.ts)_
 <!-- commandsstop -->

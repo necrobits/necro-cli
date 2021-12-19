@@ -1,7 +1,7 @@
 {
   "name": "necro-cli",
   "description": "The Necrobits CLI",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Necrobits",
   "bin": {
     "necro": "./bin/run"
@@ -53,8 +53,7 @@
   "oclif": {
     "bin": "necro",
     "commands": "./dist/commands",
-    "plugins": [
-    ],
+    "plugins": [],
     "topicSeparator": " ",
     "topics": {
       "bootstrap": {
