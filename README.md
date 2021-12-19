@@ -25,20 +25,20 @@ $ npx necro-cli bootstrap
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`necro bootstrap [PROJECT_TYPE] [VARIANT] [DIRNAME]`](#necro-bootstrap-project_type-variant-dirname)
+* [`necro bootstrap [PROJECT_TYPE] [VARIANT] [DIR]`](#necro-bootstrap-project_type-variant-dir)
 
-## `necro bootstrap [PROJECT_TYPE] [VARIANT] [DIRNAME]`
+## `necro bootstrap [PROJECT_TYPE] [VARIANT] [DIR]`
 
 Use a boilerplate and setup a new project
 
 ```
 USAGE
-  $ necro bootstrap [PROJECT_TYPE] [VARIANT] [DIRNAME] [-y]
+  $ necro bootstrap [PROJECT_TYPE] [VARIANT] [DIR] [-y]
 
 ARGUMENTS
   PROJECT_TYPE  The type of the project. For example: react
   VARIANT       The variant of the boilerplate
-  DIRNAME       The name of the project directory
+  DIR           The path to the project directory
 
 FLAGS
   -y, --yes  Skip input confirmation

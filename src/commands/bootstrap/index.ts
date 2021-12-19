@@ -9,7 +9,7 @@ import { execSync } from 'child_process';
 type BootstrapArgs = {
   project_type?: string;
   variant?: string;
-  dirname?: string;
+  dir?: string;
 }
 type BootstrapProject = {
   description?: string;
@@ -42,29 +42,45 @@ export default class BootstrapCommand extends Command {
   static args = [
     { name: 'project_type', description: 'The type of the project. For example: react', required: false },
     { name: 'variant', description: 'The variant of the boilerplate', required: false },
-    { name: 'dirname', description: 'The name of the project directory', required: false },
+    { name: 'dir', description: 'The path to the project directory', required: false },
   ]
 
   async ensureUserInput() {
     const promptCfg = [{
       type: 'list',
       name: 'project_type',
-      message: "Which type of project are you building? Choose one",
+      message: "Which type of project are you building? Choose one:",
       choices: Object.keys(this.bootstrapList),
       when: () => !this.userArgs.project_type
     },
     {
       type: 'list',
       name: 'variant',
-      message: "Choose a variant",
-      choices: (answer: any) => Object.keys(this.bootstrapList[answer.project_type || this.userArgs.project_type].variants),
+      message: "Choose a variant: ",
+      choices: (answer: any) => {
+        const variants = this.bootstrapList[answer.project_type || this.userArgs.project_type].variants
+        const values = Object.keys(variants);
+        const choices = [];
+        for (let v of values) {
+          let name = v;
+          if (!!variants[v].description) {
+            name = `${name} (${variants[v].description})`;
+          }
+          choices.push({
+            name: name,
+            short: v,
+            value: v
+          })
+        }
+        return choices;
+      },
       when: () => !this.userArgs.variant,
     },
     {
       type: 'input',
-      name: 'dirname',
-      message: `The name of the project folder: `,
-      when: () => !this.userArgs.dirname
+      name: 'dir',
+      message: `The name of the project folder:`,
+      when: () => !this.userArgs.dir
     }];
 
     const promptedInput = await prompt(promptCfg);
@@ -85,33 +101,54 @@ export default class BootstrapCommand extends Command {
       .then(resp => resp.data);
   }
 
-  validateUserInput(): boolean {
+  validateArgs(): boolean {
+    return this.validateUserInput(true);
+  }
+
+  validateUserInput(acceptMissing = false): boolean {
     const projectType = this.userArgs.project_type!;
     const variant = this.userArgs.variant!;
 
+    if (!this.userArgs.project_type && !acceptMissing) {
+      console.log(`You must provide a project type.`);
+      return false;
+    }
+
+    const typeMissingOk = acceptMissing && !this.userArgs.project_type;
     const typeOk = _.has(this.bootstrapList, this.userArgs.project_type!)
-    if (!typeOk) {
+    if (!typeOk && !typeMissingOk) {
       console.log(`Project type '${projectType}' is not supported`);
       return false;
     }
-    const variantOk = _.has(this.bootstrapList[projectType].variants, this.userArgs.variant!)
-    if (!variantOk) {
-      console.log(`Variant '${variant}' does not exist`);
+    if (typeMissingOk){
+      return true;
+    }
+
+    if (!this.userArgs.variant && !acceptMissing) {
+      console.log(`You must provide a variant.`);
       return false;
     }
+
+    const variantMissingOk = acceptMissing && !this.userArgs.variant;
+    const variantOk = _.has(this.bootstrapList[projectType].variants, this.userArgs.variant!)
+    if (!variantOk && !variantMissingOk) {
+      console.log(`Variant '${variant}' does not exist in the project type '${projectType}'`);
+      return false;
+    }
+
     return true;
   }
 
   getBoilerplate() {
     const project = this.bootstrapList[this.userArgs.project_type!];
     const variant = this.bootstrapList[this.userArgs.project_type!].variants[this.userArgs.variant!];
-    const dirname = this.userArgs.dirname!;
+    const dir = this.userArgs.dir!;
     const repoInfo = _.merge(project, variant);
 
     console.log('Getting the boilerplate...')
-    execSync(`git clone -b ${repoInfo.branch} ${repoInfo.repo} ${path.resolve(dirname)}`);
+    execSync(`git clone -b ${repoInfo.branch} ${repoInfo.repo} ${path.resolve(dir)}`);
     console.log('Finishing up...');
-    fs.rmdirSync(`${path.resolve(dirname, '.git')}`, { recursive: true })
+    fs.rmdirSync(`${path.resolve(dir, '.git')}`, { recursive: true })
     console.log('Done. The project is now ready.');
   }
 
@@ -121,6 +158,9 @@ export default class BootstrapCommand extends Command {
 
     console.log(`Getting information about the repositories...`);
     await this.fetchBootstrapList();
+    if (!this.validateArgs()) {
+      return;
+    }
     await this.ensureUserInput();
     if (!this.validateUserInput()) {
       return;
@@ -129,7 +169,7 @@ export default class BootstrapCommand extends Command {
     console.log(`===============================================`);
     console.log(`Project type: ${this.userArgs.project_type}`);
     console.log(`Variant: ${this.userArgs.variant}`);
-    console.log(`Location: ${this.userArgs.dirname}`);
+    console.log(`Location: ${this.userArgs.dir}`);
     console.log(`===============================================`);
     // Prompt user confirmation if no --yes flag is provided
     if (!flags.yes) {
